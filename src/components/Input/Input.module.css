@@ -1,0 +1,98 @@
+.InputContainer{
+  display: flex;
+  flex-direction: column;
+}
+
+.Select, .TextInput{
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 50px;
+  border-radius: 6px;
+  padding-left: 4px;
+  border: 2px solid;
+  border-color: var(--gray);
+}
+
+.CheckboxContainer{
+  display: flex;
+  align-items: center;
+  width: max-content;
+  margin-top: 1rem;
+}
+
+.Checkbox{
+  width: 24px;
+  height: 24px;
+  color: var(--gray);
+  margin-right: 1rem;
+}
+
+.RadioContainer{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+.RadioLabel {
+  width: 20%;
+  position: relative;
+  display: inline-block;
+}
+
+.RadioLabel input{
+  position:absolute;
+  opacity: 0;
+  width: 100%;
+  height: 50px;
+  z-index: var(--z-index-highest);
+  cursor: pointer;
+}
+
+.RadioLabel span {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  background-color: var(--white);
+  border: 2px solid #333; 
+
+}
+
+.RadioLabel:first-child span {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px; 
+}
+
+.RadioLabel:last-child span {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.RadioLabel input:checked + span {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+}
+
+
+
+.RadioLabel input:hover + span {
+  background-color: var(--primary-color);
+  opacity: 0.8;
+  transition: background-color 150ms ease-in;
+
+}
+
+.InputLabel{
+  margin-top: 1rem;
+  color: var(--gray);
+  font-size: 14px;
+  font-weight: 300;
+}
+.CheckboxLabel{
+  color: var(--gray);
+}

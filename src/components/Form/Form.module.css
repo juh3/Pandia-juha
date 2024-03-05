@@ -1,0 +1,11 @@
+.FormContainer{
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+h3{
+  font-weight: 300;
+}

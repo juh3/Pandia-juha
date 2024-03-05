@@ -1,0 +1,8 @@
+:root {
+  --primary-color: #237651;
+  --off-white: #f3eded;
+  --white: #fff;
+  --gray: #5b5757;
+  --z-index-highest: 20001;
+  --z-index-lowest: 1;
+}
