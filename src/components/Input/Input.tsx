@@ -7,6 +7,8 @@ interface IInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
   type: InputType
+  name: string
+  cta?: string
   options?: string[]
   defaultOption?: string
 }
@@ -15,6 +17,8 @@ const Input: React.FC<IInputProps> = ({
   label,
   type,
   options,
+  name,
+  cta,
   defaultOption,
   ...props
 }) => {
@@ -23,7 +27,9 @@ const Input: React.FC<IInputProps> = ({
       case InputType.text:
         return (
           <>
-            <label className={styles.InputLabel}>{label}</label>
+            <label htmlFor={name} className={styles.InputLabel}>
+              {label}
+            </label>
             <input className={styles.TextInput} {...props} />
           </>
         )
@@ -31,7 +37,9 @@ const Input: React.FC<IInputProps> = ({
       case InputType.select:
         return (
           <>
-            <label className={styles.InputLabel}>{label}</label>
+            <label htmlFor={name} className={styles.InputLabel}>
+              {label}
+            </label>
 
             <select
               className={styles.Select}
@@ -59,7 +67,9 @@ const Input: React.FC<IInputProps> = ({
               className={styles.Checkbox}
               {...props}
             />
-            <label className={styles.CheckboxLabel}>{label}</label>
+            <label htmlFor={name} className={styles.CheckboxLabel}>
+              {label}
+            </label>
           </div>
         )
 
@@ -69,7 +79,11 @@ const Input: React.FC<IInputProps> = ({
             <label className={styles.InputLabel}>{label}</label>
             <div className={styles.RadioContainer}>
               {key_options.map((option, index) => (
-                <label key={index} className={styles.RadioLabel}>
+                <label
+                  htmlFor={name}
+                  key={index}
+                  className={styles.RadioLabel}
+                >
                   <input
                     type="radio"
                     className={styles.Radio}
@@ -84,6 +98,20 @@ const Input: React.FC<IInputProps> = ({
           </>
         )
 
+      case InputType.upload:
+        return (
+          <>
+            <label className={styles.InputLabel}>{label}</label>
+            <label htmlFor={name} className={styles.FileLabel}>
+              <input
+                type="file"
+                className={styles.FileInput}
+                {...props}
+              />
+              <span>{cta}</span>
+            </label>
+          </>
+        )
       default:
         break
     }

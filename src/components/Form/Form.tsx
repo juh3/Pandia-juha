@@ -1,7 +1,7 @@
 import styles from './Form.module.css'
 import Input from '../Input/Input'
 import { InputType } from '../../types/types'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Button from '../Button/Button'
 import { song_options, key_options } from '../../utils/options'
 import { KaraokeSchema } from './Schema'
@@ -11,6 +11,7 @@ const Form = () => {
   const [song, setSong] = useState('')
   const [allowSave, setAllowSave] = useState(false)
   const [songKey, setSongKey] = useState('0')
+  const [picture, setPicture] = useState<null | File>(null)
 
   const handleNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -34,9 +35,15 @@ const Form = () => {
     setSongKey(event.target.value)
   }
 
-  const handleSubmit = (
+  const handleUpload = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    const { files } = event.target
+    const selectedFiles = files as FileList
+    setPicture(selectedFiles?.[0])
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = {
       name,
@@ -52,23 +59,33 @@ const Form = () => {
       console.log(error)
     }
   }
+  console.log('the picture ---', picture)
 
   return (
     <div className={styles.FormContainer}>
       <h3>Ilmoittautumislomake</h3>
-      <div>
+      <form onSubmit={handleSubmit}>
         <Input
           type={InputType.text}
           label={'Nimi tai nimimerkki*'}
           onChange={handleNameChange}
+          name="name"
           required
         />
-        <Input type={InputType.upload} label={'Kasvokuva'} />
+        <Input
+          type={InputType.upload}
+          label={'Kasvokuva'}
+          cta={'+ Tuo kasvokuva'}
+          onChange={handleUpload}
+          name="picture"
+          accept="image/"
+        />
 
         <Input
           type={InputType.select}
           label={'Biisi*'}
           options={song_options}
+          name="song"
           defaultOption="Valitse alta"
           onChange={handleSongChange}
           value={song}
@@ -87,13 +104,11 @@ const Form = () => {
           type={InputType.checkbox}
           label={'Sallin tietojeni tallennuksen karaokejärjestelmään'}
           onChange={handleSaveChange}
+          name="savetodatabase"
           checked={allowSave}
-          required
         />
-        <Button onClick={handleSubmit} type="submit">
-          Ilmoittaudu
-        </Button>
-      </div>
+        <Button type="submit">Ilmoittaudu</Button>
+      </form>
     </div>
   )
 }

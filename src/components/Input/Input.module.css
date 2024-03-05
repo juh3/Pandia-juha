@@ -96,3 +96,33 @@
 .CheckboxLabel{
   color: var(--gray);
 }
+
+
+.FileLabel{
+  width: 100%;
+  position: relative;
+  display: inline-block;
+  border: none
+}
+.FileLabel input{
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  border:none;
+  margin-top: 0.5rem;
+  z-index: var(--z-index-highest)
+}
+
+.FileLabel span{
+  margin-top: 0.5rem;
+  display: flex;
+  border: 2px dashed;
+  border-color: var(--gray);
+
+  width: 100%;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+}

@@ -6,10 +6,9 @@ const required_error = 'This field cannot be blank';
 export const KaraokeSchema = z.object({
  name: z
   .string({ invalid_type_error, required_error })
-  .min(1, 'Value is too short'),
+  .min(2, 'Value is too short'),
  song: z
-  .string({ invalid_type_error, required_error })
-  .min(1, 'Value is too short'),
+  .string({ invalid_type_error, required_error }),
  allowSave: z
   .boolean({ invalid_type_error, required_error }),
  songKey: z
