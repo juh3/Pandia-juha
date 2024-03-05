@@ -1,4 +1,3 @@
-
 export const song_options = [
   'The National - Mistaken for strangers',
   'Lyyti - Nousussa taas',
@@ -7,10 +6,7 @@ export const song_options = [
   'Kirje - Laura Moisio',
   'The Strokes - Threat of Joy',
   'J.Karjalainen - Yksi kerrallaan',
-  'Arppa - Helsingin Hulina'
-]
+  'Arppa - Helsingin Hulina',
+];
 
-
-export const key_options = [
-  '-2','-1','0','1','2'
-]
+export const key_options = ['-2', '-1', '0', '1', '2'];
