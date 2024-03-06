@@ -111,7 +111,7 @@ const Input: React.FC<IInputProps> = ({
                 <label
                   htmlFor={name + option}
                   key={index}
-                  className={styles.RadioLabel}
+                  className={styles.RadioMask}
                 >
                   <input
                     type="radio"
@@ -139,7 +139,7 @@ const Input: React.FC<IInputProps> = ({
             <label className={styles.InputLabel}>{label}</label>
             <label
               htmlFor={name}
-              className={`${styles.FileLabel} ${
+              className={`${styles.FileMask} ${
                 error ? styles.ErrorInput : ''
               }`}
             >
