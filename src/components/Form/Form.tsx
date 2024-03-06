@@ -1,56 +1,89 @@
-import styles from './Form.module.css';
-import Input from '../Input/Input';
-import { InputType } from '../../types/types';
-import React, { useState } from 'react';
-import Button from '../Button/Button';
-import { song_options, key_options } from '../../utils/options';
-import { KaraokeSchema } from './Schema';
+import styles from './Form.module.css'
+import Input from '../Input/Input'
+import { InputType } from '../../types/types'
+import React, { ChangeEventHandler, useState } from 'react'
+import Button from '../Button/Button'
+import { song_options, key_options } from '../../utils/options'
+import { KaraokeSchema } from '../../schemas/KaraokeSchema'
+import { ZodError, ZodIssue } from 'zod'
 
 const Form = () => {
-  const [name, setName] = useState('');
-  const [song, setSong] = useState('');
-  const [allowSave, setAllowSave] = useState(false);
-  const [songKey, setSongKey] = useState('0');
-  const [picture, setPicture] = useState<null | File>(null);
+  const [name, setName] = useState('')
+  const [song, setSong] = useState('')
+  const [allowSave, setAllowSave] = useState(false)
+  const [songKey, setSongKey] = useState('0')
+  const [picture, setPicture] = useState<null | File>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [validationErrors, setValidationErrors] = useState<
+    ZodIssue[] | null
+  >(null)
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
+  const handleNameChange: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setValidationErrors(null)
+    setName(event.target.value)
+  }
 
-  const handleSongChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSong(event.target.value);
-  };
+  const handleSongChange: ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
+    setValidationErrors(null)
 
-  const handleSaveChange = () => {
-    setAllowSave(!allowSave);
-  };
+    setSong(event.target.value)
+  }
 
-  const handleSongKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSongKey(event.target.value);
-  };
+  const handleSaveChange: ChangeEventHandler<
+    HTMLInputElement
+  > = () => {
+    setValidationErrors(null)
+    setAllowSave(!allowSave)
+  }
 
-  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    const selectedFiles = files as FileList;
-    setPicture(selectedFiles?.[0]);
-  };
+  const handleSongKeyChange: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setValidationErrors(null)
+    setSongKey(event.target.value)
+  }
+
+  const handleUpload: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    const { files } = event.target
+    const selectedFiles = files as FileList
+    setPicture(selectedFiles?.[0])
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
+    setSubmitting(true)
     const formData = {
       name,
       song,
       songKey,
       allowSave,
-    };
-    try {
-      console.log(formData);
-      const res = KaraokeSchema.parse(formData);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
+      picture,
     }
-  };
+    try {
+      KaraokeSchema.parse(formData)
+      setTimeout(() => {
+        setSubmitting(false)
+        setName('')
+        setSong('')
+        setSongKey('')
+        setPicture(null)
+      }, 3000)
+      window.alert(JSON.stringify(formData))
+    } catch (error) {
+      if (error instanceof ZodError) {
+        setTimeout(() => {
+          setSubmitting(false)
+        }, 1000)
+        setValidationErrors(error.issues)
+      }
+    }
+  }
 
   return (
     <div className={styles.FormContainer}>
@@ -61,7 +94,12 @@ const Form = () => {
           label={'Nimi tai nimimerkki*'}
           onChange={handleNameChange}
           name="name"
-          required
+          value={name}
+          error={
+            validationErrors?.find(
+              (error) => error.path[0] === 'name'
+            )?.message
+          }
         />
         <Input
           type={InputType.upload}
@@ -71,6 +109,11 @@ const Form = () => {
           file={picture}
           name="picture"
           accept="image/"
+          error={
+            validationErrors?.find(
+              (error) => error.path[0] === 'picture'
+            )?.message
+          }
         />
 
         <Input
@@ -81,7 +124,11 @@ const Form = () => {
           defaultOption="Valitse alta"
           onChange={handleSongChange}
           value={song}
-          required
+          error={
+            validationErrors?.find(
+              (error) => error.path[0] === 'song'
+            )?.message
+          }
         />
         <Input
           type={InputType.radio}
@@ -89,7 +136,12 @@ const Form = () => {
           name="songKey"
           radioValue={songKey}
           onChange={handleSongKeyChange}
-          required
+          options={key_options}
+          error={
+            validationErrors?.find(
+              (error) => error.path[0] === 'songKey'
+            )?.message
+          }
         />
         <Input
           type={InputType.checkbox}
@@ -97,11 +149,22 @@ const Form = () => {
           onChange={handleSaveChange}
           name="savetodatabase"
           checked={allowSave}
+          error={
+            validationErrors?.find(
+              (error) => error.path[0] === 'savetodatabase'
+            )?.message
+          }
         />
-        <Button type="submit">Ilmoittaudu</Button>
+        <Button
+          type="submit"
+          isSubmitting={submitting}
+          disabled={submitting}
+        >
+          Ilmoittaudu
+        </Button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Form;
+export default Form

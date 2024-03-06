@@ -1,17 +1,20 @@
-import React from 'react';
-import styles from './Input.module.css';
-import { InputType } from '../../types/types';
-import { key_options } from '../../utils/options';
+import React from 'react'
+import styles from './Input.module.css'
+import { InputType } from '../../types/types'
 
-interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  type: InputType;
-  name: string;
-  cta?: string;
-  options?: string[];
-  defaultOption?: string;
-  radioValue?: string;
-  file?: File;
+interface IInputProps
+  extends React.InputHTMLAttributes<
+    HTMLInputElement | HTMLSelectElement
+  > {
+  label: string
+  type: InputType
+  name: string
+  cta?: string
+  options?: string[]
+  defaultOption?: string
+  radioValue?: string
+  file?: File | null
+  error?: string | undefined
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -23,6 +26,7 @@ const Input: React.FC<IInputProps> = ({
   radioValue,
   file,
   defaultOption,
+  error,
   ...props
 }) => {
   const renderInputField = () => {
@@ -33,9 +37,18 @@ const Input: React.FC<IInputProps> = ({
             <label htmlFor={name} className={styles.InputLabel}>
               {label}
             </label>
-            <input className={styles.TextInput} {...props} />
+            <input
+              className={`${styles.TextInput} ${
+                error ? styles.ErrorInput : ''
+              }`}
+              value={props.value}
+              {...props}
+            />
+            {error && (
+              <span className={styles.ErrorText}>{error}</span>
+            )}
           </>
-        );
+        )
 
       case InputType.select:
         return (
@@ -45,8 +58,10 @@ const Input: React.FC<IInputProps> = ({
             </label>
 
             <select
-              className={styles.Select}
-              value={props.value || ''}
+              className={`${styles.Select} ${
+                error ? styles.ErrorInput : ''
+              }`}
+              value={props.value}
               {...props}
             >
               <option disabled value="">
@@ -62,29 +77,47 @@ const Input: React.FC<IInputProps> = ({
                 </option>
               ))}
             </select>
+            {error && (
+              <span className={styles.ErrorText}>{error}</span>
+            )}
           </>
-        );
+        )
 
       case InputType.checkbox:
         return (
           <div className={styles.CheckboxContainer}>
-            <input type="checkbox" className={styles.Checkbox} {...props} />
+            <input
+              type="checkbox"
+              className={`${styles.Checkbox} ${
+                error ? styles.ErrorInput : ''
+              }`}
+              {...props}
+            />
             <label htmlFor={name} className={styles.CheckboxLabel}>
               {label}
             </label>
+            {error && (
+              <span className={styles.ErrorText}>{error}</span>
+            )}
           </div>
-        );
+        )
 
       case InputType.radio:
         return (
           <>
             <label className={styles.InputLabel}>{label}</label>
             <div className={styles.RadioContainer}>
-              {key_options.map((option, index) => (
-                <label htmlFor={name} key={index} className={styles.RadioLabel}>
+              {options?.map((option, index) => (
+                <label
+                  htmlFor={name + option}
+                  key={index}
+                  className={styles.RadioLabel}
+                >
                   <input
                     type="radio"
-                    className={styles.Radio}
+                    className={`${styles.Radio} ${
+                      error ? styles.ErrorInput : ''
+                    }`}
                     checked={radioValue === option}
                     value={option}
                     id={option}
@@ -93,30 +126,45 @@ const Input: React.FC<IInputProps> = ({
                   <span> {option}</span>
                 </label>
               ))}
+              {error && (
+                <span className={styles.ErrorText}>{error}</span>
+              )}
             </div>
           </>
-        );
+        )
 
       case InputType.upload:
         return (
           <>
             <label className={styles.InputLabel}>{label}</label>
-            <label htmlFor={name} className={styles.FileLabel}>
-              <input type="file" className={styles.FileInput} {...props} />
+            <label
+              htmlFor={name}
+              className={`${styles.FileLabel} ${
+                error ? styles.ErrorInput : ''
+              }`}
+            >
+              <input
+                type="file"
+                className={styles.FileInput}
+                {...props}
+              />
               <span>{file ? <p>{file.name}</p> : cta}</span>
             </label>
+            {error && (
+              <span className={styles.ErrorText}>{error}</span>
+            )}
           </>
-        );
+        )
       default:
-        break;
+        break
     }
-  };
+  }
 
   return (
     <div className={styles.InputContainer}>
       <>{renderInputField()}</>
     </div>
-  );
-};
+  )
+}
 
-export default Input;
+export default Input

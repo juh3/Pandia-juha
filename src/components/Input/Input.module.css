@@ -132,3 +132,12 @@ select:focus > option:checked {
   justify-content: center;
   align-items: center;
 }
+
+
+.ErrorInput{
+  border: 1px solid #c41111 !important;
+}
+
+.ErrorText{
+  color: #c41111;
+}
