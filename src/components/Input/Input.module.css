@@ -6,23 +6,30 @@
 .Select,
 .TextInput {
   margin-top: 0.5rem;
-  width: 100%;
+  padding-left: 8px;
+  width: calc(100% - 8px);
   height: 50px;
   border-radius: 6px;
-  padding-left: 12px;
   border: 2px solid;
   border-color: var(--gray);
 }
 
-.Select:focus, .TextInput:focus, .FileMask:focus{
+.Select {
+  width: 100%;
+}
+
+.Select:focus,
+.TextInput:focus,
+.FileMask:focus {
   outline: 2px solid black;
   outline-offset: -6px;
 }
 
-.Select:hover, .TextInput:hover, .FileMask:hover{
+.Select:hover,
+.TextInput:hover,
+.FileMask:hover {
   border-color: var(--gray);
   opacity: 0.8;
-
 }
 
 .SelectOption {
@@ -115,6 +122,12 @@ select:focus > option:checked {
   color: var(--gray);
 }
 
+@media screen and (max-width: 420px) {
+  .CheckboxLabel {
+    max-width: 50%;
+  }
+}
+
 .FileMask {
   width: 100%;
   position: relative;
@@ -144,11 +157,10 @@ select:focus > option:checked {
   align-items: center;
 }
 
-
-.ErrorInput{
+.ErrorInput {
   border: 1px solid #c41111 !important;
 }
 
-.ErrorText{
+.ErrorText {
   color: #c41111;
 }

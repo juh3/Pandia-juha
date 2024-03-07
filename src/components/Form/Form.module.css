@@ -1,4 +1,4 @@
-.FormContainer{
+.FormContainer {
   display: flex;
   flex-direction: column;
   width: 400px;
@@ -6,6 +6,16 @@
   align-items: flex-start;
 }
 
-h3{
+@media screen and (max-width: 420px) {
+  .FormContainer {
+    width: 80%;
+  }
+}
+
+.Form {
+  width: 100%;
+}
+
+h3 {
   font-weight: 300;
 }
